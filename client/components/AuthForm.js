@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 class AuthForm extends Component {
+	
 	constructor(props){
 		super(props);
 		this.state = {
@@ -12,7 +13,6 @@ class AuthForm extends Component {
 	onSubmit(e){
 		e.preventDefault();
 		const { email, password } = this.state;
-		console.log('submitting', email, password);
 		this.props.onSubmit(email, password);
 	}
 
@@ -25,6 +25,9 @@ class AuthForm extends Component {
 					</div>
 					<div className="input-field">
 						<input type="password" placeholder="password" onChange={e => this.setState({password: e.target.value})} value={this.state.password} />
+					</div>
+					<div className="errors">
+						{ this.props.errors.map(error => <div key={error}> {error} </div>) }
 					</div>
 					<button className="btn">Submit</button>
 				</form>

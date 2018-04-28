@@ -3,6 +3,7 @@ import AuthForm from './AuthForm';
 import mutation from '../mutations/Login';
 import query from '../query/CurrentUser';
 import { graphql } from 'react-apollo';
+import { hashHistory } from 'react-router';
 
 class LoginForm extends Component {
 
@@ -14,8 +15,19 @@ class LoginForm extends Component {
 		};
 	}
 
-	onSubmit(email, password){
+	componentWillUpdate(nextProps){
+		// this.props // the old props
+		// nextProps // next set of props that will be in place when component rerenders 
 
+		if(!this.props.data.user && nextProps.data.user){
+			// redirect to dashboard 
+			hashHistory.push('/dashboard');
+		}
+	}
+
+	onSubmit(email, password){
+		// cant add a .then to redirect to dashboard since 
+		// the queries wont be refetched in time to know if user is logged in or not 
 		this.props.mutate({
 			variables: {
 				email, password
@@ -40,4 +52,6 @@ class LoginForm extends Component {
 	}
 }
 
-export default graphql(mutation)(LoginForm);
+export default graphql(query)(
+	graphql(mutation)(LoginForm)
+);
